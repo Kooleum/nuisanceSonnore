@@ -1,8 +1,14 @@
 var url = "datas.php";
+var addr_apikey = '9c3e017538374c20828840ceaf60bc7b';
+var addr_api_url = 'https://api.opencagedata.com/geocode/v1/json'
+
 var datasFetched = false;
 var nearAirports = [];
 
+navigator.geolocation.getCurrentPosition(setPosition);
+
 function getDatas() {
+    GPSToAdress();
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -13,6 +19,60 @@ function getDatas() {
         }
     };
     xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+}
+
+function getGPSDatas() {
+    var lat = document.getElementById('lat').value;
+    var lon = document.getElementById('lon').value;
+    GPSToAdress(lon, lat);
+}
+
+function getAddrDatas() {
+    adressToGPS(document.getElementById('adress').value);
+}
+
+function adressToGPS(adress) {
+    var request_url = addr_api_url +
+        '?' +
+        'key=' + addr_apikey +
+        '&q=' + encodeURIComponent(adress) +
+        '&pretty=1' +
+        '&no_annotations=1';
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var addrData = JSON.parse(this.responseText);
+            document.getElementById('lat').value = addrData.results[0].geometry.lat;
+            document.getElementById('lon').value = addrData.results[0].geometry.lng;
+            document.getElementById('adress').value = addrData.results[0].formatted;
+            getDatas();
+        }
+    };
+    xmlhttp.open("GET", request_url, true);
+    xmlhttp.send();
+}
+
+function GPSToAdress(lon, lat) {
+    var request_url = addr_api_url +
+        '?' +
+        'key=' + addr_apikey +
+        '&q=' + encodeURIComponent(lat + ',' + lon) +
+        '&pretty=1' +
+        '&no_annotations=1';
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var addrData = JSON.parse(this.responseText);
+            document.getElementById('lat').value = addrData.results[0].geometry.lat;
+            document.getElementById('lon').value = addrData.results[0].geometry.lng;
+            document.getElementById('adress').value = addrData.results[0].formatted;
+            getDatas();
+        }
+    };
+    xmlhttp.open("GET", request_url, true);
     xmlhttp.send();
 }
 
@@ -30,6 +90,9 @@ function search() {
     datas.forEach(calcDist);
 }
 
+function getUserPos() {
+    navigator.geolocation.getCurrentPosition(setPosition);
+}
 
 function calcDist(value, index, array) {
 
@@ -54,9 +117,16 @@ function calcDist(value, index, array) {
 function setNewLocation(e) {
     document.getElementById('lat').value = e.latlng['lat'];
     document.getElementById('lon').value = e.latlng['lng'];
+    GPSToAdress(e.latlng['lng'], e.latlng['lat']);
     getDatas();
 }
 
+
+function setPosition(pos) {
+    document.getElementById('lat').value = pos.coords.latitude;
+    document.getElementById('lon').value = pos.coords.longitude;
+    getDatas();
+}
 
 /* Source code adapted from: http://www.movable-type.co.uk/scripts/latlong.html */
 
