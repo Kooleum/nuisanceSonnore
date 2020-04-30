@@ -1,4 +1,4 @@
-var url = "http://127.0.0.1/nuisance/datas.php";
+var url = "datas.php";
 var datasFetched = false;
 var nearAirports = [];
 

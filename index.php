@@ -44,8 +44,8 @@
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="distance">Distance Max</label>
-                    <input type="text" id="distance" class="form-control">
+                    <label for="distance">Distance Max (Km)</label>
+                    <input type="text" id="distance" value="50" class="form-control">
                 </div>
             </div>
             <div class="form-row">
