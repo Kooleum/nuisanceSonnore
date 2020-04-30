@@ -1,6 +1,8 @@
 <?php
 $ip = $_SERVER['REMOTE_ADDR'];
-
+if ($ip == "127.0.0.1") {
+    $ip = json_decode(file_get_contents('https://api.ipify.org?format=json'))->ip;
+}
 $info = json_decode(file_get_contents('https://ipapi.co/' . $ip . '/json/?key=c2AUDS9s9a7GhWarRDk3SWHnD8RhDIXIxvlBwM7u6aABtritdZ'));
 ?>
 
@@ -43,11 +45,11 @@ $info = json_decode(file_get_contents('https://ipapi.co/' . $ip . '/json/?key=c2
                     <legend>Par coordonnées</legend>
                     <div class="form-group">
                         <label for="lat">Latitude</label>
-                        <input type="text" id="lat" class="form-control">
+                        <input type="text" id="lat" value="<?= $info->latitude ?>" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="lon">Longitude</label>
-                        <input type="text" id="lon" class="form-control">
+                        <input type="text" id="lon" value="<?= $info->longitude ?>" class="form-control">
                     </div>
                     <button onclick="getGPSDatas()" class="btn btn-outline-success" class="form-control ml-2 mt-5">Chercher</button>
                 </fieldset>
@@ -55,7 +57,7 @@ $info = json_decode(file_get_contents('https://ipapi.co/' . $ip . '/json/?key=c2
                     <legend>Par adresse</legend>
                     <div class="form-group">
                         <label for="lon">Adresse</label>
-                        <input type="text" id="adress" class="form-control">
+                        <input type="text" id="adress" value="<?= $info->city ?>" class="form-control">
                     </div>
                     <button onclick="getAddrDatas()" class="btn btn-outline-success" class="form-control ml-2 mt-5">Chercher</button>
                 </fieldset>
@@ -85,6 +87,7 @@ $info = json_decode(file_get_contents('https://ipapi.co/' . $ip . '/json/?key=c2
     </main>
     <script type="text/javascript" src="script.js"></script>
     <script src="map.js"></script>
+    <script type="text/javascript">getDatas();</script>
 </body>
 
 </html>
