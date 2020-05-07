@@ -1,3 +1,8 @@
+/**
+ * @author Alexandre Benzonana
+ * @version 1.2
+ */
+
 var airportMap = L.map('mapid').setView([10, 10], 2);
 var markers = [];
 var circle;

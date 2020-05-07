@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author Alexandre Benzonana
+ * @version 1.2
+ */
+
 header('Content-Type: application/json');
 
 const FILE = "datas.txt";

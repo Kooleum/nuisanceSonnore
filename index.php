@@ -1,4 +1,9 @@
 <?php
+/**
+ * @author Alexandre Benzonana
+ * @version 1.2
+ */
+
 $ip = $_SERVER['REMOTE_ADDR'];
 if ($ip == "127.0.0.1") {
     $ip = json_decode(file_get_contents('https://api.ipify.org?format=json'))->ip;
